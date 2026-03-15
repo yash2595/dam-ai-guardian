@@ -3,37 +3,6 @@ import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // ========================================
-// Community Alerts Service
-// ========================================
-export const communityAlertsService = {
-  sendSMS: async (recipients: string[], message: string, communities: any[]) => {
-    const response = await axios.post(`${API_BASE_URL}/api/community-alerts/sms`, {
-      recipients,
-      message,
-      communities
-    });
-    return response.data;
-  },
-
-  sendWhatsApp: async (recipients: string[], message: string, communities: any[]) => {
-    const response = await axios.post(`${API_BASE_URL}/api/community-alerts/whatsapp`, {
-      recipients,
-      message,
-      communities
-    });
-    return response.data;
-  },
-
-  sendBroadcast: async (message: string, communities: any[]) => {
-    const response = await axios.post(`${API_BASE_URL}/api/community-alerts/broadcast`, {
-      message,
-      communities
-    });
-    return response.data;
-  }
-};
-
-// ========================================
 // Government Integration Service
 // ========================================
 export const governmentService = {
@@ -94,7 +63,6 @@ export const chatbotService = {
 };
 
 export default {
-  communityAlertsService,
   governmentService,
   chatbotService
 };

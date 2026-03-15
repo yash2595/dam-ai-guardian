@@ -18,9 +18,6 @@ Is file me project me use hone wale APIs ka practical summary diya gaya hai (cur
   - POST /send (email alerts)
   - GET /history (backend alert history)
   - POST /broadcast (emergency alert broadcast)
-- /api/community
-  - Community CRUD
-  - POST /sms, POST /whatsapp, POST /broadcast
 - /api/authorities
   - Authority emails add/get/delete
 - /api/iot
@@ -37,8 +34,6 @@ Is file me project me use hone wale APIs ka practical summary diya gaya hai (cur
   - Chatbot message/history endpoints
 - /api/dam
   - Dam image/analysis endpoints
-- /api/pwa
-  - PWA notification/subscription endpoints
 
 ### Additional Backend APIs
 

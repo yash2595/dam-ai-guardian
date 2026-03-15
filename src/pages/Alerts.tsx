@@ -15,9 +15,29 @@ interface Alert {
   location: string;
   type: string;
   description: string;
-  timestamp: string;
+  createdAt: Date;
   status: 'active' | 'acknowledged' | 'resolved';
 }
+
+// Function to calculate relative time display
+const getRelativeTime = (date: Date): string => {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSecs < 60) {
+    return 'just now';
+  } else if (diffMins < 60) {
+    return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+  } else if (diffHours < 24) {
+    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+  } else {
+    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+  }
+};
 
 const Alerts = () => {
   const { t } = useLanguage();
@@ -26,6 +46,15 @@ const Alerts = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [authorityEmails, setAuthorityEmails] = useState<string>('');
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [, setUpdateTrigger] = useState(0);
+
+  // Refresh timestamps every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setUpdateTrigger(prev => prev + 1);
+    }, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -48,7 +77,7 @@ const Alerts = () => {
       location: 'Uttarakhand',
       type: 'Seismic Activity',
       description: 'Seismic activity detected - 0.9 Richter scale. Immediate monitoring required.',
-      timestamp: '2 minutes ago',
+      createdAt: new Date(Date.now() - 2 * 60 * 1000), // 2 minutes ago
       status: 'active',
     },
     {
@@ -58,7 +87,7 @@ const Alerts = () => {
       location: 'Himachal Pradesh',
       type: 'Water Level',
       description: 'Water level approaching critical threshold at 85%. Prepare for potential overflow.',
-      timestamp: '15 minutes ago',
+      createdAt: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
       status: 'active',
     },
     {
@@ -68,7 +97,7 @@ const Alerts = () => {
       location: 'Gujarat',
       type: 'Vibration',
       description: 'Unusual vibration patterns detected. Recommend structural inspection.',
-      timestamp: '1 hour ago',
+      createdAt: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
       status: 'acknowledged',
     },
     {
@@ -78,7 +107,7 @@ const Alerts = () => {
       location: 'Telangana',
       type: 'Maintenance',
       description: 'Scheduled maintenance due in 7 days. Sensor calibration required.',
-      timestamp: '3 hours ago',
+      createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
       status: 'active',
     },
     {
@@ -88,7 +117,7 @@ const Alerts = () => {
       location: 'Odisha',
       type: 'Crack Detection',
       description: 'Minor crack expansion detected. Width increased by 0.1mm.',
-      timestamp: '5 hours ago',
+      createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
       status: 'acknowledged',
     },
     {
@@ -98,7 +127,7 @@ const Alerts = () => {
       location: 'Uttarakhand',
       type: 'System',
       description: 'Routine system health check completed successfully.',
-      timestamp: '1 day ago',
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
       status: 'resolved',
     },
   ]);
@@ -342,7 +371,7 @@ const Alerts = () => {
                     <p className="text-foreground">{alert.description}</p>
 
                     <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-                      <p className="text-sm text-muted-foreground">{alert.timestamp}</p>
+                      <p className="text-sm text-muted-foreground">{getRelativeTime(alert.createdAt)}</p>
 
                       {alert.status === 'active' && (
                         <div className="flex gap-2">

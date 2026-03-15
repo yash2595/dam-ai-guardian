@@ -29,7 +29,6 @@ const Sidebar = () => {
     { to: '/dashboard/alerts', label: t('nav.alerts'), icon: AlertTriangle },
     { to: '/dashboard/advanced', label: t('nav.advancedFeatures'), icon: Zap },
     { to: '/dashboard/dam-analysis', label: '📸 Dam Analysis', icon: Camera },
-    { to: '/dashboard/community-alerts', label: 'Community Alerts', icon: Users },
     { to: '/dashboard/gis-mapping', label: 'GIS Mapping', icon: Map },
     { to: '/dashboard/government', label: 'Government', icon: Building2 },
     { to: '/dashboard/chatbot', label: 'AI Chatbot', icon: MessageCircle },

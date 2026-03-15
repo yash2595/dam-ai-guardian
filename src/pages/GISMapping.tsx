@@ -170,6 +170,15 @@ interface DamGISData {
   safeLocations: SafeLocationTemplate[];
 }
 
+// Real geographic coordinates for Indian dams
+const DAM_COORDINATES: Record<string, [number, number]> = {
+  tehri: [30.3866, 78.4930],      // Tehri Dam, Uttarakhand
+  bhakra: [31.4891, 76.1281],      // Bhakra Dam, Himachal Pradesh
+  sardar: [21.8157, 73.1860],      // Sardar Sarovar Dam, Gujarat
+  nagarjuna: [16.5386, 78.9594],   // Nagarjuna Sagar Dam, Telangana
+  hirakud: [21.8167, 84.6500]      // Hirakud Dam, Odisha
+};
+
 const DAM_GIS_DATA: Record<string, DamGISData> = {
   tehri: {
     floodZones: [
@@ -181,22 +190,22 @@ const DAM_GIS_DATA: Record<string, DamGISData> = {
       {
         id: '1',
         name: 'NH-34 Mountain Corridor',
-        coordinates: [[0, 0], [0.018, 0.011], [0.037, 0.026], [0.06, 0.041]],
+        coordinates: [[30.3866, 78.4930], [30.3999, 78.5139], [30.4138, 78.5368], [30.4298, 78.5615]],
         capacity: 4200,
         status: 'clear'
       },
       {
         id: '2',
         name: 'Chamba Link Route',
-        coordinates: [[0, 0], [0.012, -0.013], [0.024, -0.026], [0.038, -0.04]],
+        coordinates: [[30.3866, 78.4930], [30.3749, 78.4797], [30.3624, 78.4644], [30.3487, 78.4469]],
         capacity: 2700,
         status: 'congested'
       }
     ],
     safeLocations: [
-      { name: 'Tehri Stadium Camp', position: [0.055, 0.032], capacity: 7000 },
-      { name: 'Chamba Transit Shelter', position: [0.029, -0.021], capacity: 4200 },
-      { name: 'District Emergency Hospital', position: [0.022, 0.017], capacity: 650 }
+      { name: 'Tehri Stadium Camp', position: [30.4198, 78.5548], capacity: 7000 },
+      { name: 'Chamba Transit Shelter', position: [30.3598, 78.4689], capacity: 4200 },
+      { name: 'District Emergency Hospital', position: [30.3739, 78.4844], capacity: 650 }
     ]
   },
   bhakra: {
@@ -209,22 +218,22 @@ const DAM_GIS_DATA: Record<string, DamGISData> = {
       {
         id: '1',
         name: 'Nangal Highway Exit',
-        coordinates: [[0, 0], [0.015, 0.017], [0.03, 0.034], [0.047, 0.053]],
+        coordinates: [[31.4891, 76.1281], [31.5068, 76.1544], [31.5253, 76.1825], [31.5449, 76.2122]],
         capacity: 5600,
         status: 'clear'
       },
       {
         id: '2',
         name: 'Barmana Service Route',
-        coordinates: [[0, 0], [-0.011, 0.014], [-0.022, 0.027], [-0.033, 0.041]],
+        coordinates: [[31.4891, 76.1281], [31.4710, 76.1032], [31.4519, 76.0761], [31.4314, 76.0468]],
         capacity: 3400,
         status: 'clear'
       }
     ],
     safeLocations: [
-      { name: 'Nangal Relief Ground', position: [0.049, 0.048], capacity: 8800 },
-      { name: 'Ropar Community Hall', position: [0.034, 0.024], capacity: 5000 },
-      { name: 'Civil Hospital Nangal', position: [0.021, 0.015], capacity: 800 }
+      { name: 'Nangal Relief Ground', position: [31.5523, 76.2243], capacity: 8800 },
+      { name: 'Ropar Community Hall', position: [31.5187, 76.1813], capacity: 5000 },
+      { name: 'Civil Hospital Nangal', position: [31.5008, 76.1524], capacity: 800 }
     ]
   },
   sardar: {
@@ -237,22 +246,22 @@ const DAM_GIS_DATA: Record<string, DamGISData> = {
       {
         id: '1',
         name: 'Kevadia-Bharuch Arterial',
-        coordinates: [[0, 0], [0.014, 0.02], [0.028, 0.041], [0.043, 0.062]],
+        coordinates: [[21.8157, 73.1860], [21.8387, 73.2233], [21.8632, 73.2632], [21.8894, 73.3061]],
         capacity: 7300,
         status: 'clear'
       },
       {
         id: '2',
         name: 'Rajpipla Uplink',
-        coordinates: [[0, 0], [0.01, -0.015], [0.022, -0.03], [0.036, -0.046]],
+        coordinates: [[21.8157, 73.1860], [21.8026, 73.1516], [21.7891, 73.1152], [21.7748, 73.0765]],
         capacity: 4600,
         status: 'congested'
       }
     ],
     safeLocations: [
-      { name: 'Kevadia Mega Camp', position: [0.057, 0.045], capacity: 12000 },
-      { name: 'Rajpipla Shelter Hub', position: [0.031, -0.027], capacity: 6300 },
-      { name: 'Narmada Trauma Center', position: [0.024, 0.018], capacity: 950 }
+      { name: 'Kevadia Mega Camp', position: [21.8947, 73.3198], capacity: 12000 },
+      { name: 'Rajpipla Shelter Hub', position: [21.7603, 73.0348], capacity: 6300 },
+      { name: 'Narmada Trauma Center', position: [21.8096, 73.1678], capacity: 950 }
     ]
   },
   nagarjuna: {
@@ -265,22 +274,22 @@ const DAM_GIS_DATA: Record<string, DamGISData> = {
       {
         id: '1',
         name: 'Nalgonda Relief Corridor',
-        coordinates: [[0, 0], [0.013, 0.019], [0.026, 0.038], [0.041, 0.057]],
+        coordinates: [[16.5386, 78.9594], [16.5579, 79.0026], [16.5785, 79.0486], [16.6006, 79.0975]],
         capacity: 5100,
         status: 'clear'
       },
       {
         id: '2',
         name: 'Macherla Bypass Route',
-        coordinates: [[0, 0], [-0.012, 0.012], [-0.024, 0.025], [-0.038, 0.039]],
+        coordinates: [[16.5386, 78.9594], [16.5199, 78.9098], [16.4999, 78.8577], [16.4784, 78.8029]],
         capacity: 3200,
         status: 'blocked'
       }
     ],
     safeLocations: [
-      { name: 'Nalgonda Camp Complex', position: [0.052, 0.043], capacity: 7600 },
-      { name: 'Macherla Relief Node', position: [-0.029, 0.028], capacity: 4600 },
-      { name: 'Area General Hospital', position: [0.018, 0.014], capacity: 700 }
+      { name: 'Nalgonda Camp Complex', position: [16.6189, 79.1481], capacity: 7600 },
+      { name: 'Macherla Relief Node', position: [16.4533, 78.7447], capacity: 4600 },
+      { name: 'Area General Hospital', position: [16.5298, 78.9355], capacity: 700 }
     ]
   },
   hirakud: {
@@ -293,22 +302,22 @@ const DAM_GIS_DATA: Record<string, DamGISData> = {
       {
         id: '1',
         name: 'Sambalpur Ring Route',
-        coordinates: [[0, 0], [0.016, 0.013], [0.032, 0.027], [0.05, 0.042]],
+        coordinates: [[21.8167, 84.6500], [21.8389, 84.6908], [21.8629, 84.7354], [21.8889, 84.7839]],
         capacity: 6000,
         status: 'clear'
       },
       {
         id: '2',
         name: 'Burla Connector',
-        coordinates: [[0, 0], [0.009, -0.014], [0.019, -0.029], [0.031, -0.045]],
+        coordinates: [[21.8167, 84.6500], [21.8041, 84.6141], [21.7909, 84.5760], [21.7768, 84.5354]],
         capacity: 3800,
         status: 'congested'
       }
     ],
     safeLocations: [
-      { name: 'Sambalpur Relief Base', position: [0.054, 0.036], capacity: 9100 },
-      { name: 'Burla Evacuation Center', position: [0.026, -0.03], capacity: 5200 },
-      { name: 'VIMSAR Medical Unit', position: [0.02, 0.015], capacity: 900 }
+      { name: 'Sambalpur Relief Base', position: [21.9017, 84.8308], capacity: 9100 },
+      { name: 'Burla Evacuation Center', position: [21.7585, 84.4923], capacity: 5200 },
+      { name: 'VIMSAR Medical Unit', position: [21.8078, 84.6286], capacity: 900 }
     ]
   }
 };
@@ -318,7 +327,6 @@ const GISMapping = () => {
   const { selectedDam, getDamLocation, getDamLabel } = useDam();
   
   // Get current dam location
-  const damLocation = getDamLocation(selectedDam);
   const damName = getDamLabel(selectedDam);
   
   const [showFloodZones, setShowFloodZones] = useState(true);
@@ -326,8 +334,9 @@ const GISMapping = () => {
   const [showSafeLocations, setShowSafeLocations] = useState(true);
 
   const currentDamGIS = DAM_GIS_DATA[selectedDam] || DAM_GIS_DATA.tehri;
+  const damLocation = DAM_COORDINATES[selectedDam] || DAM_COORDINATES.tehri;
 
-  // Build dam-specific layers by translating relative coordinates around the selected dam.
+  // Use real geographic coordinates directly from data
   const floodZones = useMemo<FloodZone[]>(() =>
     currentDamGIS.floodZones.map((zone) => ({
       ...zone,
@@ -338,22 +347,16 @@ const GISMapping = () => {
   const evacuationRoutes = useMemo<EvacuationRoute[]>(() =>
     currentDamGIS.evacuationRoutes.map((route) => ({
       ...route,
-      coordinates: route.coordinates.map(([latOffset, lngOffset]) => [
-        damLocation[0] + latOffset,
-        damLocation[1] + lngOffset
-      ] as [number, number])
+      coordinates: route.coordinates as [number, number][]
     })),
-  [currentDamGIS, damLocation]);
+  [currentDamGIS]);
 
   const safeLocations = useMemo(() =>
     currentDamGIS.safeLocations.map((location) => ({
       ...location,
-      position: [
-        damLocation[0] + location.position[0],
-        damLocation[1] + location.position[1]
-      ] as [number, number]
+      position: location.position
     })),
-  [currentDamGIS, damLocation]);
+  [currentDamGIS]);
 
   const riskColors = {
     low: '#22c55e',

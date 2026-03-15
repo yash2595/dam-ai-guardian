@@ -18,7 +18,6 @@ import Admin from "./pages/Admin";
 import SmartAnalyticsDashboard from './components/SmartAnalyticsDashboard';
 import IoTDashboard from './components/IoTDashboard';
 import AdvancedFeatures from './pages/AdvancedFeatures';
-import CommunityAlerts from './pages/CommunityAlerts';
 import GISMapping from './pages/GISMapping';
 import GovernmentIntegration from './pages/GovernmentIntegration';
 import AIChatbot from './pages/AIChatbot';
@@ -27,7 +26,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+console.log('🔧 App component initializing...');
+
+const App = () => {
+  console.log('📘 Rendering main App structure');
+  return (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <LanguageProvider>
@@ -48,7 +51,6 @@ const App = () => (
                 <Route path="iot" element={<IoTDashboard />} />
                 <Route path="alerts" element={<Alerts />} />
                 <Route path="advanced" element={<AdvancedFeatures />} />
-                <Route path="community-alerts" element={<CommunityAlerts />} />
                 <Route path="gis-mapping" element={<GISMapping />} />
                 <Route path="government" element={<GovernmentIntegration />} />
                 <Route path="chatbot" element={<AIChatbot />} />
@@ -65,6 +67,7 @@ const App = () => (
       </LanguageProvider>
     </AuthProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

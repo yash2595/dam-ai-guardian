@@ -23,8 +23,6 @@ const damAnalysisRoutes = require('./routes/damAnalysisRoutes');
 const authorityRoutes = require('./routes/authorityRoutes');
 const iotRoutes = require('./routes/iotRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
-const voiceRoutes = require('./routes/voiceRoutes');
-const pwaRoutes = require('./routes/pwaRoutes');
 const { SensorData } = require('./database/models');
 
 const app = express();
@@ -73,8 +71,6 @@ app.use('/api/dam', damAnalysisRoutes);
 app.use('/api/authorities', authorityRoutes);
 app.use('/api/iot', iotRoutes);
 app.use('/api/analytics', analyticsRoutes);
-app.use('/api/voice', voiceRoutes);
-app.use('/api/pwa', pwaRoutes);
 
 // ========================================
 // AI Risk Assessment API (Using ML API)

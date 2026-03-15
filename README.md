@@ -6,11 +6,9 @@ An intelligent dam monitoring and community alert system built with React, Node.
 
 - **Real-time Dam Monitoring**: Live sensor data visualization and alerts
 - **Weather Integration**: Real-time weather data and forecasting
-- **Community Alerts**: SMS, WhatsApp, and email notifications
 - **AI Risk Assessment**: Intelligent analysis of dam safety conditions
 - **Government Dashboard**: Compliance reporting and regulatory oversight
 - **Multi-language Support**: English and Hindi language options
-- **PWA Support**: Install as mobile app for offline access
 - **Voice Controls**: Voice-activated alerts and commands
 
 ## Quick Start

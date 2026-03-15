@@ -112,4 +112,47 @@ All colors MUST be HSL.
   .neon-glow {
     @apply shadow-[0_0_20px_rgba(0,229,255,0.5)];
   }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateY(-20px);
+      opacity: 0.6;
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes wave {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(10px);
+    }
+  }
+
+  .animate-wave {
+    animation: wave 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 0.6;
+      filter: drop-shadow(0 0 0px rgba(0, 255, 136, 0.5));
+    }
+    50% {
+      opacity: 1;
+      filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.8));
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
 }

@@ -158,72 +158,6 @@ export const iotService = {
 };
 
 // ========================================
-// Voice Command Service
-// ========================================
-export const voiceService = {
-  processCommand: async (command: string, language: string = 'en') => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/voice/process-command`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ command, language })
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('Voice Command Error:', error);
-      return { success: false, error: 'Failed to process command' };
-    }
-  },
-
-  textToSpeech: async (text: string, language: string = 'en', voice: string = 'female') => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/voice/text-to-speech`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language, voice })
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('Text-to-Speech Error:', error);
-      return { success: false, error: 'Failed to convert text to speech' };
-    }
-  }
-};
-
-// ========================================
-// PWA Service
-// ========================================
-export const pwaService = {
-  subscribe: async (subscription: any) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/pwa/subscribe`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subscription })
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('PWA Subscribe Error:', error);
-      return { success: false, error: 'Failed to subscribe' };
-    }
-  },
-
-  sendNotification: async (title: string, body: string, data: any = {}) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/pwa/send-notification`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, body, data })
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('Send Notification Error:', error);
-      return { success: false, error: 'Failed to send notification' };
-    }
-  }
-};
-
-// ========================================
 // Analytics Service
 // ========================================
 export const analyticsService = {
@@ -333,8 +267,6 @@ export default {
   aiService,
   weatherService,
   iotService,
-  voiceService,
-  pwaService,
   analyticsService,
   visualization3DService,
   subscribeToSensorUpdates,

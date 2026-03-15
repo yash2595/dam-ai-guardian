@@ -27,6 +27,57 @@ exports.getSensors = async (req, res) => {
   }
 };
 
+// Get aggregated telemetry for visualization training/calibration
+exports.getTrainingData = async (req, res) => {
+  try {
+    const sampleSize = Math.max(20, Math.min(500, Number(req.query.sampleSize) || 120));
+    const records = await SensorData.find()
+      .sort({ timestamp: -1 })
+      .limit(sampleSize);
+
+    if (!records || records.length === 0) {
+      return res.json({
+        success: true,
+        data: {
+          sampleSize: 0,
+          profile: null,
+          latestTimestamp: null
+        }
+      });
+    }
+
+    const metrics = ['waterLevel', 'pressure', 'temperature', 'structuralStress', 'seepage', 'vibration', 'flowRate'];
+
+    const profile = metrics.reduce((acc, metric) => {
+      const values = records
+        .map((r) => Number(r?.[metric]))
+        .filter((v) => Number.isFinite(v));
+
+      if (values.length === 0) {
+        acc[metric] = { min: 0, max: 0, avg: 0 };
+        return acc;
+      }
+
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const avg = values.reduce((sum, v) => sum + v, 0) / values.length;
+      acc[metric] = { min, max, avg };
+      return acc;
+    }, {});
+
+    res.json({
+      success: true,
+      data: {
+        sampleSize: records.length,
+        profile,
+        latestTimestamp: records[0]?.timestamp || null
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 // Get latest data for a specific sensor
 exports.getLatestSensorData = async (req, res) => {
   try {

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import axios from 'axios';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -22,6 +23,24 @@ interface DamVisualizationProps {
   structuralStress?: number;
 }
 
+interface MetricRange {
+  min: number;
+  max: number;
+  avg: number;
+}
+
+interface TrainingProfile {
+  waterLevel: MetricRange;
+  pressure: MetricRange;
+  temperature: MetricRange;
+  structuralStress: MetricRange;
+  seepage: MetricRange;
+  vibration: MetricRange;
+  flowRate: MetricRange;
+}
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const DamVisualization3D: React.FC<DamVisualizationProps> = ({
   waterLevel = 65,
   pressure = 120,
@@ -38,6 +57,18 @@ const DamVisualization3D: React.FC<DamVisualizationProps> = ({
   const [showPressure, setShowPressure] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [lastMouse, setLastMouse] = useState({ x: 0, y: 0 });
+  const [isTraining, setIsTraining] = useState(false);
+  const [trainingProfile, setTrainingProfile] = useState<TrainingProfile | null>(null);
+  const [trainedSampleSize, setTrainedSampleSize] = useState(0);
+  const [trainedAt, setTrainedAt] = useState<string | null>(null);
+  const [trainingError, setTrainingError] = useState<string | null>(null);
+
+  const normalizeByProfile = (value: number, range?: MetricRange) => {
+    if (!range) return Math.max(0, Math.min(1, value / 100));
+    const span = Math.max(0.0001, range.max - range.min);
+    const normalized = (value - range.min) / span;
+    return Math.max(0, Math.min(1, normalized));
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -141,7 +172,10 @@ const DamVisualization3D: React.FC<DamVisualizationProps> = ({
     const drawWater = () => {
       if (!showWater) return;
 
-      const waterHeight = (waterLevel / 100) * (damHeight - 10);
+      const normalizedWater = trainingProfile
+        ? normalizeByProfile(waterLevel, trainingProfile.waterLevel)
+        : (waterLevel / 100);
+      const waterHeight = normalizedWater * (damHeight - 10);
       const waterY = damHeight/2 - waterHeight;
 
       // Water surface with wave animation
@@ -180,7 +214,9 @@ const DamVisualization3D: React.FC<DamVisualizationProps> = ({
     const drawPressureIndicators = () => {
       if (!showPressure) return;
 
-      const pressureIntensity = pressure / 200;
+      const pressureIntensity = trainingProfile
+        ? normalizeByProfile(pressure, trainingProfile.pressure)
+        : pressure / 200;
       const numIndicators = Math.floor(pressureIntensity * 10);
 
       for (let i = 0; i < numIndicators; i++) {
@@ -217,7 +253,9 @@ const DamVisualization3D: React.FC<DamVisualizationProps> = ({
     const drawStressVisualization = () => {
       if (!showStress) return;
 
-      const stressLevel = structuralStress / 100;
+      const stressLevel = trainingProfile
+        ? normalizeByProfile(structuralStress, trainingProfile.structuralStress)
+        : structuralStress / 100;
       
       // Stress color map
       const getStressColor = (stress: number) => {
@@ -242,7 +280,8 @@ const DamVisualization3D: React.FC<DamVisualizationProps> = ({
 
     // Draw temperature gradients
     const drawTemperatureGradient = () => {
-      const tempVariation = (temperature - 20) / 20; // Normalized temperature variation
+      const baselineTemp = trainingProfile?.temperature?.avg ?? 20;
+      const tempVariation = (temperature - baselineTemp) / Math.max(1, baselineTemp);
       
       // Create gradient
       const gradient = ctx.createLinearGradient(0, -damHeight/2, 0, damHeight/2);
@@ -358,6 +397,36 @@ const DamVisualization3D: React.FC<DamVisualizationProps> = ({
     setZoom(1);
   };
 
+  const trainVisualizationModel = async () => {
+    setIsTraining(true);
+    setTrainingError(null);
+
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/iot/training-data`, {
+        params: { sampleSize: 120 }
+      });
+
+      if (!response.data?.success) {
+        throw new Error(response.data?.error || 'Training data fetch failed');
+      }
+
+      const profile = response.data?.data?.profile as TrainingProfile | null;
+      const sampleSize = Number(response.data?.data?.sampleSize || 0);
+
+      if (!profile || sampleSize <= 0) {
+        throw new Error('No telemetry samples available for training yet');
+      }
+
+      setTrainingProfile(profile);
+      setTrainedSampleSize(sampleSize);
+      setTrainedAt(new Date().toLocaleTimeString());
+    } catch (error: any) {
+      setTrainingError(error?.message || '3D model training failed');
+    } finally {
+      setIsTraining(false);
+    }
+  };
+
   return (
     <Card className="h-full">
       <CardHeader>
@@ -417,6 +486,22 @@ const DamVisualization3D: React.FC<DamVisualizationProps> = ({
             <Thermometer className="w-4 h-4 mr-1" />
             Stress
           </Button>
+          <Button
+            variant="default"
+            size="sm"
+            onClick={trainVisualizationModel}
+            disabled={isTraining}
+          >
+            {isTraining ? 'Training...' : 'Train 3D Model'}
+          </Button>
+        </div>
+
+        <div className="mb-4 flex flex-wrap gap-2">
+          <Badge variant={trainingProfile ? 'default' : 'outline'}>
+            {trainingProfile ? `Trained on ${trainedSampleSize} samples` : 'Untrained (default scaling)'}
+          </Badge>
+          {trainedAt && <Badge variant="outline">Last trained: {trainedAt}</Badge>}
+          {trainingError && <Badge variant="destructive">{trainingError}</Badge>}
         </div>
 
         {/* 3D Canvas */}

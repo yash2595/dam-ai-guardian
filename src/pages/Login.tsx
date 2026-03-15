@@ -48,6 +48,8 @@ const Login = () => {
     setIsLoading(false);
   };
 
+  console.log('🔐 Login component rendering, t function:', typeof t);
+  
   return (
     <div className="min-h-screen flex relative overflow-hidden">
       {/* Animated background particles */}

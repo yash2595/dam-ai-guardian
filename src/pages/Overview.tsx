@@ -63,7 +63,7 @@ const Overview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <KPICard
           icon={Shield}
-          value={60000}
+          value={0}
           label={t('dashboard.totalDamsMonitored')}
           suffix="+"
           trend={`+5.2% ${t('dashboard.fromLastMonth')}`}
@@ -80,7 +80,7 @@ const Overview = () => {
         />
         <KPICard
           icon={Activity}
-          value={450000}
+          value={0}
           label={t('dashboard.activeSensors')}
           suffix="+"
           trend={`+12% ${t('dashboard.operational')}`}
@@ -98,7 +98,7 @@ const Overview = () => {
         />
         <KPICard
           icon={Users}
-          value={2500000}
+          value={0}
           label={t('dashboard.livesProtected')}
           suffix="+"
           trend={`+15% ${t('dashboard.coverage')}`}

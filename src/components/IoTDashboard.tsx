@@ -99,89 +99,7 @@ const IoTDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Health Status */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="md:col-span-2 border-red-200 bg-red-50">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-red-700">Network Health</h3>
-              <Badge variant="destructive" className="animate-pulse">
-                OFFLINE
-              </Badge>
-            </div>
-            <div className="mb-2">
-              <div className="flex justify-between text-sm mb-1">
-                <span className="text-red-700">System Health</span>
-                <span className="font-semibold text-red-700">0%</span>
-              </div>
-              <Progress value={0} className="h-3 bg-red-100" />
-            </div>
-            <div className="grid grid-cols-4 gap-2 mt-4 text-center text-sm">
-              <div>
-                <div className="text-2xl font-bold text-gray-400">0</div>
-                <div className="text-gray-600">Online</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-red-600">8</div>
-                <div className="text-gray-600">Offline</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-400">0</div>
-                <div className="text-gray-600">Maintenance</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-400">0</div>
-                <div className="text-gray-600">Error</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Water Level</p>
-                <p className="text-2xl font-bold text-gray-400">
-                  -- m
-                </p>
-                <p className="text-xs text-red-600 mt-1">Offline</p>
-              </div>
-              <Droplets className="h-8 w-8 text-gray-400" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Flow Rate</p>
-                <p className="text-2xl font-bold text-gray-400">
-                  -- m³/s
-                </p>
-                <p className="text-xs text-red-600 mt-1">Offline</p>
-              </div>
-              <Activity className="h-8 w-8 text-gray-400" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Temperature</p>
-                <p className="text-2xl font-bold text-gray-400">
-                  -- °C
-                </p>
-                <p className="text-xs text-red-600 mt-1">Offline</p>
-              </div>
-              <Thermometer className="h-8 w-8 text-gray-400" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
 
       {/* Sensor Grid */}
       <Card>
@@ -270,7 +188,9 @@ const IoTDashboard: React.FC = () => {
                     .map((sensor) => (
                       <Card 
                         key={sensor.id}
-                        className="cursor-pointer transition-all hover:shadow-md"
+                        className={`cursor-pointer transition-all hover:shadow-md ${
+                          selectedSensorId === sensor.id ? 'ring-2 ring-blue-500' : ''
+                        }`}
                         onClick={() => setSelectedSensorId(sensor.id)}
                       >
                         <CardContent className="p-4">
@@ -290,6 +210,17 @@ const IoTDashboard: React.FC = () => {
                               --
                             </div>
                             <div className="text-xs text-red-600">No Data (Offline)</div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div className="flex items-center space-x-1">
+                              <Battery className="h-3 w-3 text-gray-400" />
+                              <span className="text-gray-400">--</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Signal className="h-3 w-3 text-gray-400" />
+                              <span className="text-gray-400">--</span>
+                            </div>
                           </div>
                         </CardContent>
                       </Card>
