@@ -1,0 +1,242 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Eye, EyeOff, Shield, Activity, Bell, Lock } from 'lucide-react';
+import { toast } from 'sonner';
+import DamLogo from '@/components/DamLogo';
+import { useLanguage } from '@/contexts/LanguageContext';
+
+const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const { t } = useLanguage();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const success = await login(email, password);
+    
+    if (success) {
+      toast.success(t('auth.loginSuccess'));
+      navigate('/dashboard');
+    } else {
+      toast.error(t('auth.loginInvalid'));
+    }
+    
+    setIsLoading(false);
+  };
+
+  const handleDemoLogin = async (demoEmail: string, demoPassword: string) => {
+    setIsLoading(true);
+    const success = await login(demoEmail, demoPassword);
+    
+    if (success) {
+      toast.success(t('auth.demoLoginSuccess'));
+      navigate('/dashboard');
+    }
+    
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen flex relative overflow-hidden">
+      {/* Animated background particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-primary/30 rounded-full animate-float"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${5 + Math.random() * 5}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Left side - Hero section */}
+      <div className="hidden lg:flex lg:w-1/2 glass-card border-r border-primary/30 p-12 flex-col justify-center relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10" />
+        
+        <div className="relative z-10 space-y-8">
+          <DamLogo size={140} showText={true} />
+          
+          <div className="space-y-4">
+            <h2 className="text-4xl font-bold text-foreground">
+              {t('auth.heroTitlePrefix')}
+              <span className="gradient-text"> {t('auth.heroTitleHighlight')}</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              {t('auth.heroSubtitle')}
+            </p>
+          </div>
+
+          {/* Stats grid */}
+          <div className="grid grid-cols-2 gap-4 pt-8">
+            <div className="glass-card p-4 rounded-xl border-primary/20">
+              <div className="flex items-center gap-3 mb-2">
+                <Shield className="w-8 h-8 text-secondary" />
+                <div className="text-3xl font-bold text-foreground">0</div>
+              </div>
+              <div className="text-sm text-muted-foreground">{t('auth.statsDamsMonitored')}</div>
+            </div>
+            
+            <div className="glass-card p-4 rounded-xl border-primary/20">
+              <div className="flex items-center gap-3 mb-2">
+                <Activity className="w-8 h-8 text-primary" />
+                <div className="text-3xl font-bold text-foreground">82.2%</div>
+              </div>
+              <div className="text-sm text-muted-foreground">{t('auth.statsAiAccuracy')}</div>
+            </div>
+            
+            <div className="glass-card p-4 rounded-xl border-primary/20">
+              <div className="flex items-center gap-3 mb-2">
+                <Bell className="w-8 h-8 text-destructive" />
+                <div className="text-3xl font-bold text-foreground">24/7</div>
+              </div>
+              <div className="text-sm text-muted-foreground">{t('auth.statsAlertSystem')}</div>
+            </div>
+            
+            <div className="glass-card p-4 rounded-xl border-primary/20">
+              <div className="flex items-center gap-3 mb-2">
+                <Lock className="w-8 h-8 text-accent" />
+                <div className="text-3xl font-bold text-foreground">0</div>
+              </div>
+              <div className="text-sm text-muted-foreground">{t('auth.statsLivesProtected')}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right side - Login form */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-md space-y-8">
+          <div className="lg:hidden flex justify-center mb-8">
+            <DamLogo size={100} showText={true} />
+          </div>
+
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold text-foreground">{t('auth.welcomeBack')}</h1>
+            <p className="text-muted-foreground">{t('auth.signInSubtitle')}</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email">{t('auth.emailAddress')}</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder={t('auth.emailPlaceholder')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="glass-card"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">{t('auth.password')}</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="glass-card pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="remember"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                />
+                <Label htmlFor="remember" className="text-sm cursor-pointer">
+                  {t('auth.rememberMe')}
+                </Label>
+              </div>
+              <button type="button" className="text-sm text-primary hover:underline">
+                {t('auth.forgotPassword')}
+              </button>
+            </div>
+
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? t('auth.signingIn') : t('auth.signIn')}
+            </Button>
+          </form>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-background text-muted-foreground">{t('auth.orTryDemo')}</span>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <Button
+              variant="outline"
+              className="w-full justify-start glass-card glass-card-hover"
+              onClick={() => handleDemoLogin('admin@dam.com', 'demo123')}
+              disabled={isLoading}
+            >
+              <div className="text-left">
+                <div className="font-medium">{t('auth.adminAccount')}</div>
+                <div className="text-xs text-muted-foreground">abc - Project Guide</div>
+              </div>
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full justify-start glass-card glass-card-hover"
+              onClick={() => handleDemoLogin('engineer@dam.com', 'demo123')}
+              disabled={isLoading}
+            >
+              <div className="text-left">
+                <div className="font-medium">{t('auth.engineerAccount')}</div>
+                <div className="text-xs text-muted-foreground">pqr - Safety Engineer</div>
+              </div>
+            </Button>
+          </div>
+
+          <div className="text-center text-sm text-muted-foreground">
+            {t('auth.noAccount')}{' '}
+            <button
+              onClick={() => navigate('/signup')}
+              className="text-primary hover:underline font-medium"
+            >
+              {t('auth.signUpNow')}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
